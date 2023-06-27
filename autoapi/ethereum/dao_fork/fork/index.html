@@ -151,6 +151,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../base_types/index.html">Numeric &amp; Array Types</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../ethash/index.html">Ethash Functions</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../exceptions/index.html">Exceptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../fork_criteria/index.html">Fork Criteria</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../genesis/index.html">Genesis Configuration</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../rlp/index.html">Recursive Length Prefix (RLP) Encoding</a></li>
 </ul>
@@ -774,8 +775,8 @@ block’s number since it is the next block in the sequence.</p>
     <span class="n">ensure</span><span class="p">(</span><span class="n">header</span><span class="o">.</span><span class="n">parent_hash</span> <span class="o">==</span> <span class="n">block_parent_hash</span><span class="p">,</span> <span class="n">InvalidBlock</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="p">(</span>
-        <span class="n">header</span><span class="o">.</span><span class="n">number</span> <span class="o">&gt;=</span> <span class="n">MAINNET_FORK_BLOCK</span>
-        <span class="ow">and</span> <span class="n">header</span><span class="o">.</span><span class="n">number</span> <span class="o">&lt;</span> <span class="n">MAINNET_FORK_BLOCK</span> <span class="o">+</span> <span class="mi">10</span>
+        <span class="n">header</span><span class="o">.</span><span class="n">number</span> <span class="o">&gt;=</span> <span class="n">FORK_CRITERIA</span><span class="o">.</span><span class="n">block_number</span>
+        <span class="ow">and</span> <span class="n">header</span><span class="o">.</span><span class="n">number</span> <span class="o">&lt;</span> <span class="n">FORK_CRITERIA</span><span class="o">.</span><span class="n">block_number</span> <span class="o">+</span> <span class="mi">10</span>
     <span class="p">):</span>
         <span class="n">ensure</span><span class="p">(</span><span class="n">header</span><span class="o">.</span><span class="n">extra_data</span> <span class="o">==</span> <span class="sa">b</span><span class="s2">&quot;dao-hard-fork&quot;</span><span class="p">,</span> <span class="n">InvalidBlock</span><span class="p">)</span>
 

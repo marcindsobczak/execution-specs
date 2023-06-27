@@ -546,12 +546,13 @@ signing_hash_155
 ~~~~~~~~~~~~~~~~
 
 
-.. function:: signing_hash_155(tx: ethereum.shanghai.fork_types.LegacyTransaction) -> ethereum.crypto.hash.Hash32
+.. function:: signing_hash_155(tx: ethereum.shanghai.fork_types.LegacyTransaction, chain_id: ethereum.base_types.U64) -> ethereum.crypto.hash.Hash32
    :noindexentry:
 
    Compute the hash of a transaction used in a EIP 155 signature.
 
    :param tx: Transaction of interest.
+   :param chain_id: The id of the current chain.
 
    :returns: **hash** -- Hash of the transaction.
    :rtype: `ethereum.crypto.hash.Hash32`

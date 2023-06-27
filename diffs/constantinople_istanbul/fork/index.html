@@ -84,6 +84,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../autoapi/ethereum/base_types/index.html">Numeric &amp; Array Types</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../autoapi/ethereum/ethash/index.html">Ethash Functions</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../autoapi/ethereum/exceptions/index.html">Exceptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../autoapi/ethereum/fork_criteria/index.html">Fork Criteria</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../autoapi/ethereum/genesis/index.html">Genesis Configuration</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../autoapi/ethereum/rlp/index.html">Recursive Length Prefix (RLP) Encoding</a></li>
 </ul>
@@ -1352,7 +1353,7 @@ with these two values and therefore the sender address can be retrieved.</p>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">ensure</span><span class="p">(</span><span class="n">v</span> <span class="o">==</span> <span class="mi">35</span> <span class="o">+</span> <span class="n">chain_id</span> <span class="o">*</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">v</span> <span class="o">==</span> <span class="mi">36</span> <span class="o">+</span> <span class="n">chain_id</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">InvalidBlock</span><span class="p">)</span>
         <span class="n">public_key</span> <span class="o">=</span> <span class="n">secp256k1_recover</span><span class="p">(</span>
-            <span class="n">r</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">v</span> <span class="o">-</span> <span class="mi">35</span> <span class="o">-</span> <span class="n">chain_id</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">signing_hash_155</span><span class="p">(</span><span class="n">tx</span><span class="p">)</span>
+            <span class="n">r</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">v</span> <span class="o">-</span> <span class="mi">35</span> <span class="o">-</span> <span class="n">chain_id</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">signing_hash_155</span><span class="p">(</span><span class="n">tx</span><span class="p">,</span> <span class="n">chain_id</span><span class="p">)</span>
         <span class="p">)</span>
     <span class="k">return</span> <span class="n">Address</span><span class="p">(</span><span class="n">keccak256</span><span class="p">(</span><span class="n">public_key</span><span class="p">)[</span><span class="mi">12</span><span class="p">:</span><span class="mi">32</span><span class="p">])</span>
 </pre></div>
@@ -1397,11 +1398,14 @@ with these two values and therefore the sender address can be retrieved.</p>
 <h3>signing_hash_155<a class="headerlink" href="#signing-hash-155" title="Permalink to this headline"></a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="ethereum.constantinople.fork.signing_hash_155">
-<span class="sig-name descname"><span class="pre">signing_hash_155</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ethereum.constantinople.fork.signing_hash_155" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">signing_hash_155</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chain_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ethereum.constantinople.fork.signing_hash_155" title="Permalink to this definition"></a></dt>
 <dd><p>Compute the hash of a transaction used in a EIP 155 signature.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>tx</strong> – Transaction of interest.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tx</strong> – Transaction of interest.</p></li>
+<li><p><strong>chain_id</strong> – The id of the current chain.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>hash</strong> – Hash of the transaction.</p>
@@ -1412,7 +1416,7 @@ with these two values and therefore the sender address can be retrieved.</p>
 </dl>
 </dd></dl>
 
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">signing_hash_155</span><span class="p">(</span><span class="n">tx</span><span class="p">:</span> <span class="n">Transaction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Hash32</span><span class="p">:</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">signing_hash_155</span><span class="p">(</span><span class="n">tx</span><span class="p">:</span> <span class="n">Transaction</span><span class="p">,</span> <span class="n">chain_id</span><span class="p">:</span> <span class="n">U64</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Hash32</span><span class="p">:</span>
     <span class="k">return</span> <span class="n">keccak256</span><span class="p">(</span>
         <span class="n">rlp</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span>
             <span class="p">(</span>
@@ -1422,7 +1426,7 @@ with these two values and therefore the sender address can be retrieved.</p>
                 <span class="n">tx</span><span class="o">.</span><span class="n">to</span><span class="p">,</span>
                 <span class="n">tx</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
                 <span class="n">tx</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
-                <span class="n">Uint</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+                <span class="n">chain_id</span><span class="p">,</span>
                 <span class="n">Uint</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
                 <span class="n">Uint</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
             <span class="p">)</span>
