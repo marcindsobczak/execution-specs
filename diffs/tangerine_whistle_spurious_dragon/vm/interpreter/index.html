@@ -415,7 +415,7 @@
 <em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">MessageCallOutput</span></span><a class="headerlink" href="#ethereum.tangerine_whistle.vm.interpreter.MessageCallOutput" title="Permalink to this definition"></a></dt>
 <dd><dl class="py attribute">
 <dt class="sig sig-object py" id="ethereum.tangerine_whistle.vm.interpreter.MessageCallOutput.gas_left">
-<span class="sig-name descname"><span class="pre">gas_left</span></span><em class="property"> <span class="pre">:ethereum.base_types.U256</span></em><a class="headerlink" href="#ethereum.tangerine_whistle.vm.interpreter.MessageCallOutput.gas_left" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">gas_left</span></span><em class="property"> <span class="pre">:ethereum.base_types.Uint</span></em><a class="headerlink" href="#ethereum.tangerine_whistle.vm.interpreter.MessageCallOutput.gas_left" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -477,7 +477,8 @@ else it executes a call from the <cite>message.caller</cite> to the <cite>messag
             env.state, message.current_target
         )
         if is_collision:
-            return <span class="change-replaced">MessageCallOutput(U256(0),</span><span class="change-replacement">MessageCallOutput(</span> U256(0), <span class="change-added">U256(0), </span>tuple(), set(), <span class="change-replaced">True)</span><span class="change-replacement">set(), True
+            return <span class="change-replaced">MessageCallOutput(Uint(0),</span><span class="change-replacement">MessageCallOutput(
+                Uint(0),</span> U256(0), tuple(), set(), <span class="change-replaced">True)</span><span class="change-replacement">set(), True
             )</span>
         else:
             evm = process_create_message(message, env)
@@ -553,7 +554,7 @@ else it executes a call from the <cite>message.caller</cite> to the <cite>messag
         <span class="change-added">ensure(len(contract_code) &lt;= MAX_CODE_SIZE, OutOfGasError)
         </span>except ExceptionalHalt:
             rollback_transaction(env.state)
-            evm.gas_left = U256(0)
+            evm.gas_left = Uint(0)
             evm.has_erred = True
         else:
             set_code(env.state, message.current_target, contract_code)
@@ -669,7 +670,7 @@ else it executes a call from the <cite>message.caller</cite> to the <cite>messag
             op_implementation[op](evm)
 
     except ExceptionalHalt:
-        evm.gas_left = U256(0)
+        evm.gas_left = Uint(0)
         evm.has_erred = True
     return evm
 </pre>

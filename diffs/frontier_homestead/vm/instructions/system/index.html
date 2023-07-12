@@ -381,7 +381,7 @@
     charge_gas(evm, GAS_CREATE + extend_memory.cost)
 
     create_message_gas = evm.gas_left
-    evm.gas_left = U256(0)
+    evm.gas_left = Uint(0)
 
     # OPERATION
     evm.memory += b&quot;\x00&quot; * extend_memory.expand_by
@@ -510,7 +510,7 @@
     child_message = Message(
         caller=caller,
         target=to,
-        gas=U256(gas),
+        gas=gas,
         value=value,
         data=call_data,
         code=code,

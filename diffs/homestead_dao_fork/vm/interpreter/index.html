@@ -407,7 +407,7 @@
 <em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">MessageCallOutput</span></span><a class="headerlink" href="#ethereum.homestead.vm.interpreter.MessageCallOutput" title="Permalink to this definition"></a></dt>
 <dd><dl class="py attribute">
 <dt class="sig sig-object py" id="ethereum.homestead.vm.interpreter.MessageCallOutput.gas_left">
-<span class="sig-name descname"><span class="pre">gas_left</span></span><em class="property"> <span class="pre">:ethereum.base_types.U256</span></em><a class="headerlink" href="#ethereum.homestead.vm.interpreter.MessageCallOutput.gas_left" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">gas_left</span></span><em class="property"> <span class="pre">:ethereum.base_types.Uint</span></em><a class="headerlink" href="#ethereum.homestead.vm.interpreter.MessageCallOutput.gas_left" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -464,7 +464,7 @@ else it executes a call from the <cite>message.caller</cite> to the <cite>messag
             env.state, message.current_target
         )
         if is_collision:
-            return MessageCallOutput(U256(0), U256(0), tuple(), set(), True)
+            return MessageCallOutput(Uint(0), U256(0), tuple(), set(), True)
         else:
             evm = process_create_message(message, env)
     else:
@@ -540,7 +540,7 @@ else it executes a call from the <cite>message.caller</cite> to the <cite>messag
             charge_gas(evm, contract_code_gas)
         except ExceptionalHalt:
             rollback_transaction(env.state)
-            evm.gas_left = U256(0)
+            evm.gas_left = Uint(0)
             evm.has_erred = True
         else:
             set_code(env.state, message.current_target, contract_code)
@@ -557,7 +557,7 @@ else it executes a call from the <cite>message.caller</cite> to the <cite>messag
             charge_gas(evm, contract_code_gas)
         except ExceptionalHalt:
             rollback_transaction(env.state)
-            evm.gas_left = U256(0)
+            evm.gas_left = Uint(0)
             evm.has_erred = True
         else:
             set_code(env.state, message.current_target, contract_code)
@@ -673,7 +673,7 @@ else it executes a call from the <cite>message.caller</cite> to the <cite>messag
             op_implementation[op](evm)
 
     except ExceptionalHalt:
-        evm.gas_left = U256(0)
+        evm.gas_left = Uint(0)
         evm.has_erred = True
     return evm
 </pre>

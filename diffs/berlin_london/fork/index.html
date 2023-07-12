@@ -1011,12 +1011,13 @@ on the correct block. The result is the actual hash value of the block.</p>
     <span class="change-added">base_fee_per_gas: Uint,
     </span>gas_available: Uint,
     chain_id: U64,
-) -&gt; <span class="change-replaced">Address:</span><span class="change-replacement">Tuple[Address, U256]:</span>
+) -&gt; <span class="change-replaced">Address:</span><span class="change-replacement">Tuple[Address, Uint]:</span>
     ensure(tx.gas &lt;= gas_available, InvalidBlock)
     sender_address = recover_sender(chain_id, tx)
 
     <span class="change-added">if isinstance(tx, FeeMarketTransaction):
         ensure(tx.max_fee_per_gas &gt;= tx.max_priority_fee_per_gas, InvalidBlock)
+        ensure(tx.max_fee_per_gas &gt;= base_fee_per_gas, InvalidBlock)
 
         priority_fee_per_gas = min(
             tx.max_priority_fee_per_gas,
@@ -1357,7 +1358,7 @@ execution.</p>
 
 <pre class="literal-block">def process_transaction(
     env: vm.Environment, tx: Transaction
-) -&gt; Tuple[U256, Tuple[Log, ...], bool]:
+) -&gt; Tuple[Uint, Tuple[Log, ...], bool]:
     ensure(validate_transaction(tx), InvalidBlock)
 
     sender = env.origin

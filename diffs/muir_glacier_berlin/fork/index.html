@@ -1207,7 +1207,7 @@ execution.</p>
 
 <pre class="literal-block">def process_transaction(
     env: vm.Environment, tx: Transaction
-) -&gt; Tuple[U256, Tuple[Log, ...], bool]:
+) -&gt; Tuple[Uint, Tuple[Log, ...], bool]:
     ensure(validate_transaction(tx), InvalidBlock)
 
     sender = env.origin

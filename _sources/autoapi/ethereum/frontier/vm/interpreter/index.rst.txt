@@ -85,7 +85,7 @@ Contains the following:
    
 
    .. py:attribute:: gas_left
-         :annotation: :ethereum.base_types.U256
+         :annotation: :ethereum.base_types.Uint
 
       
 

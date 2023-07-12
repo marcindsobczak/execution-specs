@@ -524,7 +524,7 @@ process_transaction
 ~~~~~~~~~~~~~~~~~~~
 
 
-.. function:: process_transaction(env: ethereum.istanbul.vm.Environment, tx: ethereum.istanbul.fork_types.Transaction) -> Tuple[ethereum.base_types.U256, Tuple[ethereum.istanbul.fork_types.Log, Ellipsis], bool]
+.. function:: process_transaction(env: ethereum.istanbul.vm.Environment, tx: ethereum.istanbul.fork_types.Transaction) -> Tuple[ethereum.base_types.Uint, Tuple[ethereum.istanbul.fork_types.Log, Ellipsis], bool]
    :noindexentry:
 
    Execute a transaction against the provided environment.

@@ -1189,7 +1189,7 @@ execution.</p>
 
 <pre class="literal-block">def process_transaction(
     env: vm.Environment, tx: Transaction
-) -&gt; Tuple[U256, Tuple[Log, <span class="change-replaced">...]]:</span><span class="change-replacement">...], bool]:</span>
+) -&gt; Tuple[Uint, Tuple[Log, <span class="change-replaced">...]]:</span><span class="change-replacement">...], bool]:</span>
     ensure(validate_transaction(tx), InvalidBlock)
 
     sender = env.origin

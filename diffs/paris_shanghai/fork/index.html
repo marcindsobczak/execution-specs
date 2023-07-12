@@ -809,12 +809,13 @@ block’s number since it is the next block in the sequence.</p>
     <span class="n">base_fee_per_gas</span><span class="p">:</span> <span class="n">Uint</span><span class="p">,</span>
     <span class="n">gas_available</span><span class="p">:</span> <span class="n">Uint</span><span class="p">,</span>
     <span class="n">chain_id</span><span class="p">:</span> <span class="n">U64</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Address</span><span class="p">,</span> <span class="n">U256</span><span class="p">]:</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Address</span><span class="p">,</span> <span class="n">Uint</span><span class="p">]:</span>
     <span class="n">ensure</span><span class="p">(</span><span class="n">tx</span><span class="o">.</span><span class="n">gas</span> <span class="o">&lt;=</span> <span class="n">gas_available</span><span class="p">,</span> <span class="n">InvalidBlock</span><span class="p">)</span>
     <span class="n">sender_address</span> <span class="o">=</span> <span class="n">recover_sender</span><span class="p">(</span><span class="n">chain_id</span><span class="p">,</span> <span class="n">tx</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tx</span><span class="p">,</span> <span class="n">FeeMarketTransaction</span><span class="p">):</span>
         <span class="n">ensure</span><span class="p">(</span><span class="n">tx</span><span class="o">.</span><span class="n">max_fee_per_gas</span> <span class="o">&gt;=</span> <span class="n">tx</span><span class="o">.</span><span class="n">max_priority_fee_per_gas</span><span class="p">,</span> <span class="n">InvalidBlock</span><span class="p">)</span>
+        <span class="n">ensure</span><span class="p">(</span><span class="n">tx</span><span class="o">.</span><span class="n">max_fee_per_gas</span> <span class="o">&gt;=</span> <span class="n">base_fee_per_gas</span><span class="p">,</span> <span class="n">InvalidBlock</span><span class="p">)</span>
 
         <span class="n">priority_fee_per_gas</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span>
             <span class="n">tx</span><span class="o">.</span><span class="n">max_priority_fee_per_gas</span><span class="p">,</span>
@@ -1039,7 +1040,7 @@ execution.</p>
 
 <pre class="literal-block">def process_transaction(
     env: vm.Environment, tx: Transaction
-) -&gt; Tuple[U256, Tuple[Log, ...], bool]:
+) -&gt; Tuple[Uint, Tuple[Log, ...], bool]:
     ensure(validate_transaction(tx), InvalidBlock)
 
     sender = env.origin

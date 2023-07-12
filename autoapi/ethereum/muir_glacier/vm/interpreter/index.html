@@ -484,7 +484,7 @@
 <em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">MessageCallOutput</span></span><a class="headerlink" href="#ethereum.muir_glacier.vm.interpreter.MessageCallOutput" title="Permalink to this definition"></a></dt>
 <dd><dl class="py attribute">
 <dt class="sig sig-object py" id="ethereum.muir_glacier.vm.interpreter.MessageCallOutput.gas_left">
-<span class="sig-name descname"><span class="pre">gas_left</span></span><em class="property"> <span class="pre">:ethereum.base_types.U256</span></em><a class="headerlink" href="#ethereum.muir_glacier.vm.interpreter.MessageCallOutput.gas_left" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">gas_left</span></span><em class="property"> <span class="pre">:ethereum.base_types.Uint</span></em><a class="headerlink" href="#ethereum.muir_glacier.vm.interpreter.MessageCallOutput.gas_left" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -547,7 +547,7 @@ else it executes a call from the <cite>message.caller</cite> to the <cite>messag
         <span class="p">)</span>
         <span class="k">if</span> <span class="n">is_collision</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">MessageCallOutput</span><span class="p">(</span>
-                <span class="n">U256</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">U256</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="nb">tuple</span><span class="p">(),</span> <span class="nb">set</span><span class="p">(),</span> <span class="nb">set</span><span class="p">(),</span> <span class="kc">True</span>
+                <span class="n">Uint</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">U256</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="nb">tuple</span><span class="p">(),</span> <span class="nb">set</span><span class="p">(),</span> <span class="nb">set</span><span class="p">(),</span> <span class="kc">True</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">evm</span> <span class="o">=</span> <span class="n">process_create_message</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
@@ -630,7 +630,7 @@ else it executes a call from the <cite>message.caller</cite> to the <cite>messag
             <span class="n">ensure</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">contract_code</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">MAX_CODE_SIZE</span><span class="p">,</span> <span class="n">OutOfGasError</span><span class="p">)</span>
         <span class="k">except</span> <span class="n">ExceptionalHalt</span><span class="p">:</span>
             <span class="n">rollback_transaction</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>
-            <span class="n">evm</span><span class="o">.</span><span class="n">gas_left</span> <span class="o">=</span> <span class="n">U256</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">evm</span><span class="o">.</span><span class="n">gas_left</span> <span class="o">=</span> <span class="n">Uint</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
             <span class="n">evm</span><span class="o">.</span><span class="n">output</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span>
             <span class="n">evm</span><span class="o">.</span><span class="n">has_erred</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">else</span><span class="p">:</span>
@@ -750,7 +750,7 @@ else it executes a call from the <cite>message.caller</cite> to the <cite>messag
             <span class="n">op_implementation</span><span class="p">[</span><span class="n">op</span><span class="p">](</span><span class="n">evm</span><span class="p">)</span>
 
     <span class="k">except</span> <span class="n">ExceptionalHalt</span><span class="p">:</span>
-        <span class="n">evm</span><span class="o">.</span><span class="n">gas_left</span> <span class="o">=</span> <span class="n">U256</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">evm</span><span class="o">.</span><span class="n">gas_left</span> <span class="o">=</span> <span class="n">Uint</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">evm</span><span class="o">.</span><span class="n">output</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span>
         <span class="n">evm</span><span class="o">.</span><span class="n">has_erred</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="k">except</span> <span class="n">Revert</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>

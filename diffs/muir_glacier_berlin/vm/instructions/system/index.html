@@ -388,7 +388,7 @@
     <span class="change-added">evm.accessed_addresses.add(contract_address)
 
     </span>create_message_gas = max_message_call_gas(Uint(evm.gas_left))
-    evm.gas_left -= U256(create_message_gas)
+    evm.gas_left -= create_message_gas
 
     ensure(not evm.message.is_static, WriteInStaticContext)
     evm.return_data = b&quot;&quot;
@@ -419,7 +419,7 @@
     child_message = Message(
         caller=evm.message.current_target,
         target=Bytes0(),
-        gas=U256(create_message_gas),
+        gas=create_message_gas,
         value=endowment,
         data=b&quot;&quot;,
         code=call_data,
@@ -610,7 +610,7 @@ depends on the init_code instead of the nonce of sender.</p>
     child_message = Message(
         caller=caller,
         target=to,
-        gas=U256(gas),
+        gas=gas,
         value=value,
         data=call_data,
         code=code,

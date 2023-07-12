@@ -524,7 +524,7 @@ process_transaction
 ~~~~~~~~~~~~~~~~~~~
 
 
-.. function:: process_transaction(env: ethereum.constantinople.vm.Environment, tx: ethereum.constantinople.fork_types.Transaction) -> Tuple[ethereum.base_types.U256, Tuple[ethereum.constantinople.fork_types.Log, Ellipsis], bool]
+.. function:: process_transaction(env: ethereum.constantinople.vm.Environment, tx: ethereum.constantinople.fork_types.Transaction) -> Tuple[ethereum.base_types.Uint, Tuple[ethereum.constantinople.fork_types.Log, Ellipsis], bool]
    :noindexentry:
 
    Execute a transaction against the provided environment.

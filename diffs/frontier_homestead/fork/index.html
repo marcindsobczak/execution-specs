@@ -1136,7 +1136,7 @@ execution.</p>
 
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">process_transaction</span><span class="p">(</span>
     <span class="n">env</span><span class="p">:</span> <span class="n">vm</span><span class="o">.</span><span class="n">Environment</span><span class="p">,</span> <span class="n">tx</span><span class="p">:</span> <span class="n">Transaction</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">U256</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Log</span><span class="p">,</span> <span class="o">...</span><span class="p">]]:</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Uint</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Log</span><span class="p">,</span> <span class="o">...</span><span class="p">]]:</span>
     <span class="n">ensure</span><span class="p">(</span><span class="n">validate_transaction</span><span class="p">(</span><span class="n">tx</span><span class="p">),</span> <span class="n">InvalidBlock</span><span class="p">)</span>
 
     <span class="n">sender</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">origin</span>
