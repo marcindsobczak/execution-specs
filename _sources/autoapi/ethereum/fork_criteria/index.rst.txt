@@ -48,21 +48,21 @@ Type that represents the condition required for a fork to occur.
    
 
    .. py:attribute:: BLOCK_NUMBER
-         :annotation: = 0
+         :annotation: :Final[int] = 0
 
       
 
    
 
    .. py:attribute:: TIMESTAMP
-         :annotation: = 1
+         :annotation: :Final[int] = 1
 
       
 
    
 
    .. py:attribute:: UNSCHEDULED
-         :annotation: = 2
+         :annotation: :Final[int] = 2
 
       
 
@@ -95,6 +95,12 @@ Type that represents the condition required for a fork to occur.
       Check whether fork criteria have been met.
 
 
+   .. py:method:: __repr__() -> str
+      :abstractmethod:
+
+      String representation of this object.
+
+
 
 
 ByBlockNumber
@@ -119,6 +125,11 @@ Forks that occur when a specific block number has been reached.
    .. py:method:: check(block_number: int, timestamp: int) -> bool
 
       Check whether the block number has been reached.
+
+
+   .. py:method:: __repr__() -> str
+
+      String representation of this object.
 
 
 
@@ -147,6 +158,11 @@ Forks that occur when a specific timestamp has been reached.
       Check whether the timestamp has been reached.
 
 
+   .. py:method:: __repr__() -> str
+
+      String representation of this object.
+
+
 
 
 Unscheduled
@@ -164,6 +180,11 @@ Forks that have not been scheduled.
    .. py:method:: check(block_number: int, timestamp: int) -> bool
 
       Unscheduled forks never occur.
+
+
+   .. py:method:: __repr__() -> str
+
+      String representation of this object.
 
 
 

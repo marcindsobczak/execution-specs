@@ -79,6 +79,11 @@ Forks that occur when a specific block number has been reached.
       Check whether the block number has been reached.
 
 
+   .. py:method:: __repr__() -> str
+
+      String representation of this object.
+
+
 
 
 FORK_CRITERIA

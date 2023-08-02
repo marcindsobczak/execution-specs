@@ -414,17 +414,17 @@
 <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="ethereum.fork_criteria.ForkCriteria.BLOCK_NUMBER">
-<span class="sig-name descname"><span class="pre">BLOCK_NUMBER</span></span><em class="property"> <span class="pre">=</span> <span class="pre">0</span></em><a class="headerlink" href="#ethereum.fork_criteria.ForkCriteria.BLOCK_NUMBER" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">BLOCK_NUMBER</span></span><em class="property"> <span class="pre">:Final[int]</span> <span class="pre">=</span> <span class="pre">0</span></em><a class="headerlink" href="#ethereum.fork_criteria.ForkCriteria.BLOCK_NUMBER" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="ethereum.fork_criteria.ForkCriteria.TIMESTAMP">
-<span class="sig-name descname"><span class="pre">TIMESTAMP</span></span><em class="property"> <span class="pre">=</span> <span class="pre">1</span></em><a class="headerlink" href="#ethereum.fork_criteria.ForkCriteria.TIMESTAMP" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">TIMESTAMP</span></span><em class="property"> <span class="pre">:Final[int]</span> <span class="pre">=</span> <span class="pre">1</span></em><a class="headerlink" href="#ethereum.fork_criteria.ForkCriteria.TIMESTAMP" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="ethereum.fork_criteria.ForkCriteria.UNSCHEDULED">
-<span class="sig-name descname"><span class="pre">UNSCHEDULED</span></span><em class="property"> <span class="pre">=</span> <span class="pre">2</span></em><a class="headerlink" href="#ethereum.fork_criteria.ForkCriteria.UNSCHEDULED" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">UNSCHEDULED</span></span><em class="property"> <span class="pre">:Final[int]</span> <span class="pre">=</span> <span class="pre">2</span></em><a class="headerlink" href="#ethereum.fork_criteria.ForkCriteria.UNSCHEDULED" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -457,6 +457,12 @@ forks and scheduled forks are before unscheduled forks.</p>
 <dd><p>Check whether fork criteria have been met.</p>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="ethereum.fork_criteria.ForkCriteria.__repr__">
+<em class="property"><span class="pre">abstract</span> </em><span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="headerlink" href="#ethereum.fork_criteria.ForkCriteria.__repr__" title="Permalink to this definition"></a></dt>
+<dd><p>String representation of this object.</p>
+</dd></dl>
+
 </dd></dl>
 
 </section>
@@ -476,6 +482,12 @@ forks and scheduled forks are before unscheduled forks.</p>
 <dt class="sig sig-object py" id="ethereum.fork_criteria.ByBlockNumber.check">
 <span class="sig-name descname"><span class="pre">check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">block_number</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestamp</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="headerlink" href="#ethereum.fork_criteria.ByBlockNumber.check" title="Permalink to this definition"></a></dt>
 <dd><p>Check whether the block number has been reached.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ethereum.fork_criteria.ByBlockNumber.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="headerlink" href="#ethereum.fork_criteria.ByBlockNumber.__repr__" title="Permalink to this definition"></a></dt>
+<dd><p>String representation of this object.</p>
 </dd></dl>
 
 </dd></dl>
@@ -499,6 +511,12 @@ forks and scheduled forks are before unscheduled forks.</p>
 <dd><p>Check whether the timestamp has been reached.</p>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="ethereum.fork_criteria.ByTimestamp.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="headerlink" href="#ethereum.fork_criteria.ByTimestamp.__repr__" title="Permalink to this definition"></a></dt>
+<dd><p>String representation of this object.</p>
+</dd></dl>
+
 </dd></dl>
 
 </section>
@@ -513,6 +531,12 @@ forks and scheduled forks are before unscheduled forks.</p>
 <dt class="sig sig-object py" id="ethereum.fork_criteria.Unscheduled.check">
 <span class="sig-name descname"><span class="pre">check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">block_number</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestamp</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="headerlink" href="#ethereum.fork_criteria.Unscheduled.check" title="Permalink to this definition"></a></dt>
 <dd><p>Unscheduled forks never occur.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ethereum.fork_criteria.Unscheduled.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="headerlink" href="#ethereum.fork_criteria.Unscheduled.__repr__" title="Permalink to this definition"></a></dt>
+<dd><p>String representation of this object.</p>
 </dd></dl>
 
 </dd></dl>
