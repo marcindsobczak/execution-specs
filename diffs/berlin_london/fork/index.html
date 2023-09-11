@@ -1548,12 +1548,13 @@ with these two values and therefore the sender address can be retrieved.</p>
 </dd></dl>
 
 <pre class="literal-block">def recover_sender(chain_id: U64, tx: Transaction) -&gt; Address:
-    v, r, s = tx.v, tx.r, tx.s
+    r, s = tx.r, tx.s
 
     ensure(0 &lt; r and r &lt; SECP256K1N, InvalidBlock)
     ensure(0 &lt; s and s &lt;= SECP256K1N // 2, InvalidBlock)
 
     if isinstance(tx, LegacyTransaction):
+        v = tx.v
         if v == 27 or v == 28:
             public_key = secp256k1_recover(
                 r, s, v - 27, signing_hash_pre155(tx)
@@ -1566,12 +1567,15 @@ with these two values and therefore the sender address can be retrieved.</p>
                 r, s, v - 35 - chain_id * 2, signing_hash_155(tx, chain_id)
             )
     elif isinstance(tx, AccessListTransaction):
-        public_key = secp256k1_recover(r, s, v, signing_hash_2930(tx))
+        public_key = secp256k1_recover(
+            r, s, tx.y_parity, signing_hash_2930(tx)
+        )<span class="change-added">
+    elif isinstance(tx, FeeMarketTransaction):
+        public_key = secp256k1_recover(
+            r, s, tx.y_parity, signing_hash_1559(tx)
+        )</span>
 
-    <span class="change-added">elif isinstance(tx, FeeMarketTransaction):
-        public_key = secp256k1_recover(r, s, v, signing_hash_1559(tx))
-
-    </span>return Address(keccak256(public_key)[12:32])
+    return Address(keccak256(public_key)[12:32])
 </pre>
 </section>
 <section id="signing-hash-pre155">
