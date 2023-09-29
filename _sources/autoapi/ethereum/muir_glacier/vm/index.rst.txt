@@ -144,6 +144,13 @@ Items external to the virtual machine itself, provided by the environment.
 
       
 
+   
+
+   .. py:attribute:: traces
+         :annotation: :List[dict]
+
+      
+
 
 
 Message
@@ -229,6 +236,13 @@ Items that are used by contract creation or message call.
 
    .. py:attribute:: is_static
          :annotation: :bool
+
+      
+
+   
+
+   .. py:attribute:: parent_evm
+         :annotation: :Optional[Evm]
 
       
 

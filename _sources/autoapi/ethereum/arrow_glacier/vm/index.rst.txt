@@ -151,6 +151,13 @@ Items external to the virtual machine itself, provided by the environment.
 
       
 
+   
+
+   .. py:attribute:: traces
+         :annotation: :List[dict]
+
+      
+
 
 
 Message
@@ -250,6 +257,13 @@ Items that are used by contract creation or message call.
 
    .. py:attribute:: accessed_storage_keys
          :annotation: :Set[Tuple[ethereum.arrow_glacier.fork_types.Address, ethereum.base_types.Bytes32]]
+
+      
+
+   
+
+   .. py:attribute:: parent_evm
+         :annotation: :Optional[Evm]
 
       
 

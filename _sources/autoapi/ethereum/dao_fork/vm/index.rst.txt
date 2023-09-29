@@ -137,6 +137,13 @@ Items external to the virtual machine itself, provided by the environment.
 
       
 
+   
+
+   .. py:attribute:: traces
+         :annotation: :List[dict]
+
+      
+
 
 
 Message
@@ -215,6 +222,13 @@ Items that are used by contract creation or message call.
 
    .. py:attribute:: should_transfer_value
          :annotation: :bool
+
+      
+
+   
+
+   .. py:attribute:: parent_evm
+         :annotation: :Optional[Evm]
 
       
 
@@ -324,13 +338,6 @@ The internal state of the virtual machine.
 
    .. py:attribute:: has_erred
          :annotation: :bool
-
-      
-
-   
-
-   .. py:attribute:: children
-         :annotation: :List[Evm]
 
       
 
