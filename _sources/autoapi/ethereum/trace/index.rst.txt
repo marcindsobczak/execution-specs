@@ -224,7 +224,7 @@ evm_trace
 ~~~~~~~~~
 
 
-.. function:: evm_trace(evm: object, event: TraceEvent) -> None
+.. function:: evm_trace(evm: object, event: TraceEvent, trace_memory: bool = False, trace_stack: bool = True, trace_return_data: bool = False) -> None
    :noindexentry:
 
    Create a trace of the event.
