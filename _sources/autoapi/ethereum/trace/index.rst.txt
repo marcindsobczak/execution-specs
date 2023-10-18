@@ -94,8 +94,8 @@ Trace event that is triggered at the end of a transaction.
 
    
 
-   .. py:attribute:: has_erred
-         :annotation: :bool
+   .. py:attribute:: error
+         :annotation: :Optional[Exception]
 
       
 
@@ -167,6 +167,13 @@ Trace event that is triggered when an opcode raises an exception.
 
 
 .. class:: OpException
+
+   
+
+   .. py:attribute:: error
+         :annotation: :Exception
+
+      
 
 
 

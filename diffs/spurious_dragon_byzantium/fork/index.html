@@ -863,13 +863,13 @@ on the correct block. The result is the actual hash value of the block.</p>
 <h3>make_receipt<a class="headerlink" href="#make-receipt" title="Permalink to this headline"></a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="ethereum.spurious_dragon.fork.make_receipt">
-<span class="sig-name descname"><span class="pre">make_receipt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">post_state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">has_erred</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cumulative_gas_used</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ethereum.spurious_dragon.fork.make_receipt" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">make_receipt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">post_state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cumulative_gas_used</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ethereum.spurious_dragon.fork.make_receipt" title="Permalink to this definition"></a></dt>
 <dd><p>Make the receipt for a transaction that was executed.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>tx</strong> – The executed transaction.</p></li>
-<li><p><strong class="change-replaced">post_state</strong><strong class="change-replacement">has_erred</strong> – <span class="change-replaced">The state root immediately after this transaction.</span><span class="change-replacement">Whether the top level frame of the transaction exited with an error.</span></p></li>
+<li><p><strong class="change-replaced">post_state</strong><strong class="change-replacement">error</strong> – <span class="change-replaced">The state root immediately after this transaction.</span><span class="change-replacement">Error in the top level frame of the transaction, if any.</span></p></li>
 <li><p><strong>cumulative_gas_used</strong> – The total gas used so far in the block after the transaction was
 executed.</p></li>
 <li><p><strong>logs</strong> – The logs produced by the transaction.</p></li>
@@ -886,12 +886,12 @@ executed.</p></li>
 
 <pre class="literal-block">def make_receipt(
     tx: Transaction,
-    <span class="change-replaced">post_state: Bytes32,</span><span class="change-replacement">has_erred: bool,</span>
+    <span class="change-replaced">post_state: Bytes32,</span><span class="change-replacement">error: Optional[Exception],</span>
     cumulative_gas_used: Uint,
     logs: Tuple[Log, ...],
 ) -&gt; Receipt:
     receipt = Receipt(
-        <span class="change-replaced">post_state=post_state,</span><span class="change-replacement">succeeded=not has_erred,</span>
+        <span class="change-replaced">post_state=post_state,</span><span class="change-replacement">succeeded=error is None,</span>
         cumulative_gas_used=cumulative_gas_used,
         bloom=logs_bloom(logs),
         logs=logs,
@@ -983,11 +983,11 @@ block.</p></li>
             traces=[],
         )
 
-        gas_used, <span class="change-added">logs, has_erred = process_transaction(env, tx)
+        gas_used, <span class="change-added">logs, error = process_transaction(env, tx)
         gas_available -= gas_used
 
         receipt = make_receipt(
-            tx, has_erred, (block_gas_limit - gas_available), </span>logs <span class="change-added">)
+            tx, error, (block_gas_limit - gas_available), </span>logs <span class="change-added">)
 
         trie_set(
             receipts_trie,
@@ -1190,7 +1190,7 @@ execution.</p>
 
 <pre class="literal-block">def process_transaction(
     env: vm.Environment, tx: Transaction
-) -&gt; Tuple[Uint, Tuple[Log, <span class="change-replaced">...]]:</span><span class="change-replacement">...], bool]:</span>
+) -&gt; Tuple[Uint, Tuple[Log, <span class="change-replaced">...]]:</span><span class="change-replacement">...], Optional[Exception]]:</span>
     ensure(validate_transaction(tx), InvalidBlock)
 
     sender = env.origin
@@ -1246,7 +1246,7 @@ execution.</p>
         if account_exists_and_is_empty(env.state, address):
             destroy_account(env.state, address)
 
-    return total_gas_used, <span class="change-replaced">output.logs</span><span class="change-replacement">output.logs, output.has_erred</span>
+    return total_gas_used, <span class="change-replaced">output.logs</span><span class="change-replacement">output.logs, output.error</span>
 </pre>
 </section>
 <section id="validate-transaction">

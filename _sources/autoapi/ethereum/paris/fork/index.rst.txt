@@ -334,13 +334,13 @@ make_receipt
 ~~~~~~~~~~~~
 
 
-.. function:: make_receipt(tx: ethereum.paris.fork_types.Transaction, has_erred: bool, cumulative_gas_used: ethereum.base_types.Uint, logs: Tuple[ethereum.paris.fork_types.Log, Ellipsis]) -> Union[ethereum.base_types.Bytes, ethereum.paris.fork_types.Receipt]
+.. function:: make_receipt(tx: ethereum.paris.fork_types.Transaction, error: Optional[Exception], cumulative_gas_used: ethereum.base_types.Uint, logs: Tuple[ethereum.paris.fork_types.Log, Ellipsis]) -> Union[ethereum.base_types.Bytes, ethereum.paris.fork_types.Receipt]
    :noindexentry:
 
    Make the receipt for a transaction that was executed.
 
    :param tx: The executed transaction.
-   :param has_erred: Whether the top level frame of the transaction exited with an error.
+   :param error: The error from the execution if any.
    :param cumulative_gas_used: The total gas used so far in the block after the transaction was
                                executed.
    :param logs: The logs produced by the transaction.
@@ -403,7 +403,7 @@ process_transaction
 ~~~~~~~~~~~~~~~~~~~
 
 
-.. function:: process_transaction(env: ethereum.paris.vm.Environment, tx: ethereum.paris.fork_types.Transaction) -> Tuple[ethereum.base_types.Uint, Tuple[ethereum.paris.fork_types.Log, Ellipsis], bool]
+.. function:: process_transaction(env: ethereum.paris.vm.Environment, tx: ethereum.paris.fork_types.Transaction) -> Tuple[ethereum.base_types.Uint, Tuple[ethereum.paris.fork_types.Log, Ellipsis], Optional[Exception]]
    :noindexentry:
 
    Execute a transaction against the provided environment.

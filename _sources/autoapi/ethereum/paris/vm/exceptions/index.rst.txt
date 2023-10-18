@@ -199,3 +199,17 @@ Raised when the new contract code starts with 0xEF.
    Bases: :py:obj:`ExceptionalHalt`
 
 
+
+AddressCollision
+~~~~~~~~~~~~~~~~
+
+
+Raised when the new contract address has a collision.
+
+
+.. exception:: AddressCollision
+
+
+   Bases: :py:obj:`ExceptionalHalt`
+
+

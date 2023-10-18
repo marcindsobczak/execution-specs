@@ -62,7 +62,7 @@ STACK_DEPTH_LIMIT
 
 .. undocinclude:: /../src/ethereum/frontier/vm/interpreter.py
    :language: python
-   :lines: 48-48
+   :lines: 53-53
 
 
 MessageCallOutput
@@ -77,7 +77,7 @@ Contains the following:
       2. `refund_counter`: gas to refund after execution.
       3. `logs`: list of `Log` generated during execution.
       4. `accounts_to_delete`: Contracts which have self-destructed.
-      5. `has_erred`: True if execution has caused an error.
+      5. `error`: The error from the execution if any.
 
 
 .. class:: MessageCallOutput
@@ -112,8 +112,8 @@ Contains the following:
 
    
 
-   .. py:attribute:: has_erred
-         :annotation: :bool
+   .. py:attribute:: error
+         :annotation: :Optional[Exception]
 
       
 

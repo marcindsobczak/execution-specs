@@ -476,7 +476,7 @@
 <li><p><cite>logs</cite>: list of <cite>Log</cite> generated during execution.</p></li>
 <li><p><cite>accounts_to_delete</cite>: Contracts which have self-destructed.</p></li>
 <li><p><cite>touched_accounts</cite>: Accounts that have been touched.</p></li>
-<li><p><cite>has_erred</cite>: True if execution has caused an error.</p></li>
+<li><p><cite>error</cite>: The error from the execution if any.</p></li>
 </ol>
 </div></blockquote>
 <dl class="py class">
@@ -508,8 +508,8 @@
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="ethereum.paris.vm.interpreter.MessageCallOutput.has_erred">
-<span class="sig-name descname"><span class="pre">has_erred</span></span><em class="property"> <span class="pre">:bool</span></em><a class="headerlink" href="#ethereum.paris.vm.interpreter.MessageCallOutput.has_erred" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="ethereum.paris.vm.interpreter.MessageCallOutput.error">
+<span class="sig-name descname"><span class="pre">error</span></span><em class="property"> <span class="pre">:Optional[Exception]</span></em><a class="headerlink" href="#ethereum.paris.vm.interpreter.MessageCallOutput.error" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -547,7 +547,7 @@ else it executes a call from the <cite>message.caller</cite> to the <cite>messag
         <span class="p">)</span>
         <span class="k">if</span> <span class="n">is_collision</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">MessageCallOutput</span><span class="p">(</span>
-                <span class="n">Uint</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">U256</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="nb">tuple</span><span class="p">(),</span> <span class="nb">set</span><span class="p">(),</span> <span class="nb">set</span><span class="p">(),</span> <span class="kc">True</span>
+                <span class="n">Uint</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">U256</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="nb">tuple</span><span class="p">(),</span> <span class="nb">set</span><span class="p">(),</span> <span class="nb">set</span><span class="p">(),</span> <span class="n">AddressCollision</span><span class="p">()</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">evm</span> <span class="o">=</span> <span class="n">process_create_message</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
@@ -556,7 +556,7 @@ else it executes a call from the <cite>message.caller</cite> to the <cite>messag
         <span class="k">if</span> <span class="n">account_exists_and_is_empty</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">state</span><span class="p">,</span> <span class="n">Address</span><span class="p">(</span><span class="n">message</span><span class="o">.</span><span class="n">target</span><span class="p">)):</span>
             <span class="n">evm</span><span class="o">.</span><span class="n">touched_accounts</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Address</span><span class="p">(</span><span class="n">message</span><span class="o">.</span><span class="n">target</span><span class="p">))</span>
 
-    <span class="k">if</span> <span class="n">evm</span><span class="o">.</span><span class="n">has_erred</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">evm</span><span class="o">.</span><span class="n">error</span><span class="p">:</span>
         <span class="n">logs</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Log</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="p">()</span>
         <span class="n">accounts_to_delete</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
         <span class="n">touched_accounts</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
@@ -567,9 +567,7 @@ else it executes a call from the <cite>message.caller</cite> to the <cite>messag
         <span class="n">touched_accounts</span> <span class="o">=</span> <span class="n">evm</span><span class="o">.</span><span class="n">touched_accounts</span>
         <span class="n">refund_counter</span> <span class="o">=</span> <span class="n">U256</span><span class="p">(</span><span class="n">evm</span><span class="o">.</span><span class="n">refund_counter</span><span class="p">)</span>
 
-    <span class="n">tx_end</span> <span class="o">=</span> <span class="n">TransactionEnd</span><span class="p">(</span>
-        <span class="n">message</span><span class="o">.</span><span class="n">gas</span> <span class="o">-</span> <span class="n">evm</span><span class="o">.</span><span class="n">gas_left</span><span class="p">,</span> <span class="n">evm</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="n">evm</span><span class="o">.</span><span class="n">has_erred</span>
-    <span class="p">)</span>
+    <span class="n">tx_end</span> <span class="o">=</span> <span class="n">TransactionEnd</span><span class="p">(</span><span class="n">message</span><span class="o">.</span><span class="n">gas</span> <span class="o">-</span> <span class="n">evm</span><span class="o">.</span><span class="n">gas_left</span><span class="p">,</span> <span class="n">evm</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="n">evm</span><span class="o">.</span><span class="n">error</span><span class="p">)</span>
     <span class="n">evm_trace</span><span class="p">(</span><span class="n">evm</span><span class="p">,</span> <span class="n">tx_end</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">MessageCallOutput</span><span class="p">(</span>
@@ -578,7 +576,7 @@ else it executes a call from the <cite>message.caller</cite> to the <cite>messag
         <span class="n">logs</span><span class="o">=</span><span class="n">logs</span><span class="p">,</span>
         <span class="n">accounts_to_delete</span><span class="o">=</span><span class="n">accounts_to_delete</span><span class="p">,</span>
         <span class="n">touched_accounts</span><span class="o">=</span><span class="n">touched_accounts</span><span class="p">,</span>
-        <span class="n">has_erred</span><span class="o">=</span><span class="n">evm</span><span class="o">.</span><span class="n">has_erred</span><span class="p">,</span>
+        <span class="n">error</span><span class="o">=</span><span class="n">evm</span><span class="o">.</span><span class="n">error</span><span class="p">,</span>
     <span class="p">)</span>
 </pre></div>
 </div>
@@ -625,7 +623,7 @@ else it executes a call from the <cite>message.caller</cite> to the <cite>messag
 
     <span class="n">increment_nonce</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">state</span><span class="p">,</span> <span class="n">message</span><span class="o">.</span><span class="n">current_target</span><span class="p">)</span>
     <span class="n">evm</span> <span class="o">=</span> <span class="n">process_message</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">evm</span><span class="o">.</span><span class="n">has_erred</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">evm</span><span class="o">.</span><span class="n">error</span><span class="p">:</span>
         <span class="n">contract_code</span> <span class="o">=</span> <span class="n">evm</span><span class="o">.</span><span class="n">output</span>
         <span class="n">contract_code_gas</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">contract_code</span><span class="p">)</span> <span class="o">*</span> <span class="n">GAS_CODE_DEPOSIT</span>
         <span class="k">try</span><span class="p">:</span>
@@ -633,11 +631,11 @@ else it executes a call from the <cite>message.caller</cite> to the <cite>messag
                 <span class="n">ensure</span><span class="p">(</span><span class="n">contract_code</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="mh">0xEF</span><span class="p">,</span> <span class="n">InvalidContractPrefix</span><span class="p">)</span>
             <span class="n">charge_gas</span><span class="p">(</span><span class="n">evm</span><span class="p">,</span> <span class="n">contract_code_gas</span><span class="p">)</span>
             <span class="n">ensure</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">contract_code</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">MAX_CODE_SIZE</span><span class="p">,</span> <span class="n">OutOfGasError</span><span class="p">)</span>
-        <span class="k">except</span> <span class="n">ExceptionalHalt</span><span class="p">:</span>
+        <span class="k">except</span> <span class="n">ExceptionalHalt</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
             <span class="n">rollback_transaction</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>
             <span class="n">evm</span><span class="o">.</span><span class="n">gas_left</span> <span class="o">=</span> <span class="n">Uint</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
             <span class="n">evm</span><span class="o">.</span><span class="n">output</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span>
-            <span class="n">evm</span><span class="o">.</span><span class="n">has_erred</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">evm</span><span class="o">.</span><span class="n">error</span> <span class="o">=</span> <span class="n">error</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">set_code</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">state</span><span class="p">,</span> <span class="n">message</span><span class="o">.</span><span class="n">current_target</span><span class="p">,</span> <span class="n">contract_code</span><span class="p">)</span>
             <span class="n">commit_transaction</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>
@@ -684,7 +682,7 @@ else it executes a call from the <cite>message.caller</cite> to the <cite>messag
         <span class="p">)</span>
 
     <span class="n">evm</span> <span class="o">=</span> <span class="n">execute_code</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">evm</span><span class="o">.</span><span class="n">has_erred</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">evm</span><span class="o">.</span><span class="n">error</span><span class="p">:</span>
         <span class="c1"># revert state to the last saved checkpoint</span>
         <span class="c1"># since the message call resulted in an error</span>
         <span class="n">rollback_transaction</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>
@@ -735,7 +733,6 @@ else it executes a call from the <cite>message.caller</cite> to the <cite>messag
         <span class="n">output</span><span class="o">=</span><span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
         <span class="n">accounts_to_delete</span><span class="o">=</span><span class="nb">set</span><span class="p">(),</span>
         <span class="n">touched_accounts</span><span class="o">=</span><span class="nb">set</span><span class="p">(),</span>
-        <span class="n">has_erred</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">return_data</span><span class="o">=</span><span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
         <span class="n">error</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">accessed_addresses</span><span class="o">=</span><span class="n">message</span><span class="o">.</span><span class="n">accessed_addresses</span><span class="p">,</span>
@@ -761,15 +758,14 @@ else it executes a call from the <cite>message.caller</cite> to the <cite>messag
 
         <span class="n">evm_trace</span><span class="p">(</span><span class="n">evm</span><span class="p">,</span> <span class="n">EvmStop</span><span class="p">(</span><span class="n">Ops</span><span class="o">.</span><span class="n">STOP</span><span class="p">))</span>
 
-    <span class="k">except</span> <span class="n">ExceptionalHalt</span><span class="p">:</span>
-        <span class="n">evm_trace</span><span class="p">(</span><span class="n">evm</span><span class="p">,</span> <span class="n">OpException</span><span class="p">())</span>
+    <span class="k">except</span> <span class="n">ExceptionalHalt</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+        <span class="n">evm_trace</span><span class="p">(</span><span class="n">evm</span><span class="p">,</span> <span class="n">OpException</span><span class="p">(</span><span class="n">error</span><span class="p">))</span>
         <span class="n">evm</span><span class="o">.</span><span class="n">gas_left</span> <span class="o">=</span> <span class="n">Uint</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">evm</span><span class="o">.</span><span class="n">output</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span>
-        <span class="n">evm</span><span class="o">.</span><span class="n">has_erred</span> <span class="o">=</span> <span class="kc">True</span>
-    <span class="k">except</span> <span class="n">Revert</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="n">evm_trace</span><span class="p">(</span><span class="n">evm</span><span class="p">,</span> <span class="n">OpException</span><span class="p">())</span>
-        <span class="n">evm</span><span class="o">.</span><span class="n">error</span> <span class="o">=</span> <span class="n">e</span>
-        <span class="n">evm</span><span class="o">.</span><span class="n">has_erred</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">evm</span><span class="o">.</span><span class="n">error</span> <span class="o">=</span> <span class="n">error</span>
+    <span class="k">except</span> <span class="n">Revert</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+        <span class="n">evm_trace</span><span class="p">(</span><span class="n">evm</span><span class="p">,</span> <span class="n">OpException</span><span class="p">(</span><span class="n">error</span><span class="p">))</span>
+        <span class="n">evm</span><span class="o">.</span><span class="n">error</span> <span class="o">=</span> <span class="n">error</span>
     <span class="k">return</span> <span class="n">evm</span>
 </pre></div>
 </div>

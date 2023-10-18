@@ -343,8 +343,8 @@ The internal state of the virtual machine.
 
    
 
-   .. py:attribute:: has_erred
-         :annotation: :bool
+   .. py:attribute:: error
+         :annotation: :Optional[Exception]
 
       
 

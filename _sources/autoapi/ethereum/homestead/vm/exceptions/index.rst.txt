@@ -124,3 +124,17 @@ Raised when the message depth is greater than `1024`
    Bases: :py:obj:`ExceptionalHalt`
 
 
+
+AddressCollision
+~~~~~~~~~~~~~~~~
+
+
+Raised when the new contract address has a collision.
+
+
+.. exception:: AddressCollision
+
+
+   Bases: :py:obj:`ExceptionalHalt`
+
+

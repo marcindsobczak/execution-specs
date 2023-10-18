@@ -869,13 +869,13 @@ on the correct block. The result is the actual hash value of the block.</p>
 <h3>make_receipt<a class="headerlink" href="#make-receipt" title="Permalink to this headline"></a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="ethereum.muir_glacier.fork.make_receipt">
-<span class="sig-name descname"><span class="pre">make_receipt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">has_erred</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cumulative_gas_used</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ethereum.muir_glacier.fork.make_receipt" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">make_receipt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cumulative_gas_used</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ethereum.muir_glacier.fork.make_receipt" title="Permalink to this definition"></a></dt>
 <dd><p>Make the receipt for a transaction that was executed.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>tx</strong> – The executed transaction.</p></li>
-<li><p><strong>has_erred</strong> – Whether the top level frame of the transaction exited with an error.</p></li>
+<li><p><strong>error</strong> – Error in the top level frame of the transaction, if any.</p></li>
 <li><p><strong>cumulative_gas_used</strong> – The total gas used so far in the block after the transaction was
 executed.</p></li>
 <li><p><strong>logs</strong> – The logs produced by the transaction.</p></li>
@@ -892,12 +892,12 @@ executed.</p></li>
 
 <pre class="literal-block">def make_receipt(
     tx: Transaction,
-    has_erred: bool,
+    error: Optional[Exception],
     cumulative_gas_used: Uint,
     logs: Tuple[Log, ...],
 ) -&gt; <span class="change-replaced">Receipt:</span><span class="change-replacement">Union[Bytes, Receipt]:</span>
     receipt = Receipt(
-        succeeded=not has_erred,
+        succeeded=error is None,
         cumulative_gas_used=cumulative_gas_used,
         bloom=logs_bloom(logs),
         logs=logs,
@@ -999,7 +999,7 @@ block.</p></li>
             traces=[],
         )
 
-        gas_used, logs, has_erred = process_transaction(env, </span>tx)
+        gas_used, logs, error = process_transaction(env, </span>tx)
 
         <span class="change-removed">sender_address = check_transaction(tx, gas_available, chain_id)
 
@@ -1018,11 +1018,11 @@ block.</p></li>
             traces=[],
         )
 
-        gas_used, logs, has_erred = process_transaction(env, tx)
+        gas_used, logs, error = process_transaction(env, tx)
         </span>gas_available -= gas_used
 
         receipt = make_receipt(
-            tx, has_erred, (block_gas_limit - gas_available), logs
+            tx, error, (block_gas_limit - gas_available), logs
         )
 
         trie_set(
@@ -1209,7 +1209,7 @@ execution.</p>
 
 <pre class="literal-block">def process_transaction(
     env: vm.Environment, tx: Transaction
-) -&gt; Tuple[Uint, Tuple[Log, ...], bool]:
+) -&gt; Tuple[Uint, Tuple[Log, ...], Optional[Exception]]:
     ensure(validate_transaction(tx), InvalidBlock)
 
     sender = env.origin
@@ -1275,7 +1275,7 @@ execution.</p>
         if account_exists_and_is_empty(env.state, address):
             destroy_account(env.state, address)
 
-    return total_gas_used, output.logs, output.has_erred
+    return total_gas_used, output.logs, output.error
 </pre>
 </section>
 <section id="validate-transaction">

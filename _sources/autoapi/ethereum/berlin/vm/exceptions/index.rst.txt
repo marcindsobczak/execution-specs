@@ -185,3 +185,17 @@ Raised when invalid parameters are passed.
    Bases: :py:obj:`ExceptionalHalt`
 
 
+
+AddressCollision
+~~~~~~~~~~~~~~~~
+
+
+Raised when the new contract address has a collision.
+
+
+.. exception:: AddressCollision
+
+
+   Bases: :py:obj:`ExceptionalHalt`
+
+

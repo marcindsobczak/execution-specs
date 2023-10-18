@@ -407,7 +407,7 @@
 <li><p><cite>logs</cite>: list of <cite>Log</cite> generated during execution.</p></li>
 <li><p><cite>accounts_to_delete</cite>: Contracts which have self-destructed.</p></li>
 <li class="change-added"><p><cite>touched_accounts</cite>: Accounts that have been touched.</p></li>
-<li><p><cite>has_erred</cite>: True if execution has caused an error.</p></li>
+<li><p><cite>error</cite>: The error from the execution if any.</p></li>
 </ol>
 </div></blockquote>
 <dl class="py class">
@@ -439,8 +439,8 @@
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="ethereum.tangerine_whistle.vm.interpreter.MessageCallOutput.has_erred">
-<span class="sig-name descname"><span class="pre">has_erred</span></span><em class="property"> <span class="pre">:bool</span></em><a class="headerlink" href="#ethereum.tangerine_whistle.vm.interpreter.MessageCallOutput.has_erred" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="ethereum.tangerine_whistle.vm.interpreter.MessageCallOutput.error">
+<span class="sig-name descname"><span class="pre">error</span></span><em class="property"> <span class="pre">:Optional[Exception]</span></em><a class="headerlink" href="#ethereum.tangerine_whistle.vm.interpreter.MessageCallOutput.error" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -477,9 +477,9 @@ else it executes a call from the <cite>message.caller</cite> to the <cite>messag
             env.state, message.current_target
         )
         if is_collision:
-            return <span class="change-replaced">MessageCallOutput(Uint(0),</span><span class="change-replacement">MessageCallOutput(
-                Uint(0),</span> U256(0), tuple(), set(), <span class="change-replaced">True)</span><span class="change-replacement">set(), True
-            )</span>
+            return MessageCallOutput(
+                Uint(0), U256(0), tuple(), set(), <span class="change-added">set(), </span>AddressCollision()
+            )
         else:
             evm = process_create_message(message, env)
     else:
@@ -488,7 +488,7 @@ else it executes a call from the <cite>message.caller</cite> to the <cite>messag
     if <span class="change-added">account_exists_and_is_empty(env.state, Address(message.target)):
             evm.touched_accounts.add(Address(message.target))
 
-    if </span>evm.has_erred:
+    if </span>evm.error:
         logs: Tuple[Log, ...] = ()
         accounts_to_delete = set()
         <span class="change-added">touched_accounts = set()
@@ -499,9 +499,7 @@ else it executes a call from the <cite>message.caller</cite> to the <cite>messag
         <span class="change-added">touched_accounts = evm.touched_accounts
         </span>refund_counter = evm.refund_counter
 
-    tx_end = TransactionEnd(
-        message.gas - evm.gas_left, evm.output, evm.has_erred
-    )
+    tx_end = TransactionEnd(message.gas - evm.gas_left, evm.output, evm.error)
     evm_trace(evm, tx_end)
 
     return MessageCallOutput(
@@ -510,7 +508,7 @@ else it executes a call from the <cite>message.caller</cite> to the <cite>messag
         logs=logs,
         accounts_to_delete=accounts_to_delete,
         <span class="change-added">touched_accounts=touched_accounts,
-        </span>has_erred=evm.has_erred,
+        </span>error=evm.error,
     )
 </pre>
 </section>
@@ -549,16 +547,16 @@ else it executes a call from the <cite>message.caller</cite> to the <cite>messag
 
     <span class="change-added">increment_nonce(env.state, message.current_target)
     </span>evm = process_message(message, env)
-    if not evm.has_erred:
+    if not evm.error:
         contract_code = evm.output
         contract_code_gas = len(contract_code) * GAS_CODE_DEPOSIT
         try:
             charge_gas(evm, contract_code_gas)
         <span class="change-added">ensure(len(contract_code) &lt;= MAX_CODE_SIZE, OutOfGasError)
-        </span>except ExceptionalHalt:
+        </span>except ExceptionalHalt as error:
             rollback_transaction(env.state)
             evm.gas_left = Uint(0)
-            evm.has_erred = True
+            evm.error = error
         else:
             set_code(env.state, message.current_target, contract_code)
             commit_transaction(env.state)
@@ -604,7 +602,7 @@ else it executes a call from the <cite>message.caller</cite> to the <cite>messag
         <span class="p">)</span>
 
     <span class="n">evm</span> <span class="o">=</span> <span class="n">execute_code</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">evm</span><span class="o">.</span><span class="n">has_erred</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">evm</span><span class="o">.</span><span class="n">error</span><span class="p">:</span>
         <span class="c1"># revert state to the last saved checkpoint</span>
         <span class="c1"># since the message call resulted in an error</span>
         <span class="n">rollback_transaction</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>
@@ -655,7 +653,7 @@ else it executes a call from the <cite>message.caller</cite> to the <cite>messag
         output=b&quot;&quot;,
         accounts_to_delete=set(),
         <span class="change-added">touched_accounts=set(),
-        </span>has_erred=False,
+        </span>error=None,
     )
     try:
 
@@ -677,10 +675,10 @@ else it executes a call from the <cite>message.caller</cite> to the <cite>messag
 
         evm_trace(evm, EvmStop(Ops.STOP))
 
-    except ExceptionalHalt:
-        evm_trace(evm, OpException())
+    except ExceptionalHalt as error:
+        evm_trace(evm, OpException(error))
         evm.gas_left = Uint(0)
-        evm.has_erred = True
+        evm.error = error
     return evm
 </pre>
 </section>

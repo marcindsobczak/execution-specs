@@ -371,13 +371,6 @@ The internal state of the virtual machine.
 
    
 
-   .. py:attribute:: has_erred
-         :annotation: :bool
-
-      
-
-   
-
    .. py:attribute:: return_data
          :annotation: :ethereum.base_types.Bytes
 
